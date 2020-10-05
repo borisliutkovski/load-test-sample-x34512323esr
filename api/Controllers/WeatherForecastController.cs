@@ -38,11 +38,16 @@ namespace api.Controllers
             .ToArray();
         }
 
-        [HttpGet("slow")]
+        [HttpGet("/slow")]
         public IEnumerable<WeatherForecast> GetSlow()
         {
             lock (lockObject)
             {
+                var f = 0;
+                while(f < 50000000)
+                {
+                    ++f;
+                }
                 var rng = new Random();
                 return Enumerable.Range(1, 5).Select(index => new WeatherForecast
                 {

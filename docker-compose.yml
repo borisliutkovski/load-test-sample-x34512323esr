@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  api:
+    image: api
+    build:
+      context: .
+      dockerfile: api/dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8001
+    ports:
+      - "8001:8001"
+
+  k6-1:
+    image: k6-1
+    build:
+      context: .
+      dockerfile: tests/loadtests/dockerfile
