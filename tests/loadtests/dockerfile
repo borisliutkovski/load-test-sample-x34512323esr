@@ -1,0 +1,6 @@
+from loadimpact/k6
+
+workdir /
+copy tests/loadtests/index.js index.js
+
+ENTRYPOINT ["k6", "run", "index.js"]
