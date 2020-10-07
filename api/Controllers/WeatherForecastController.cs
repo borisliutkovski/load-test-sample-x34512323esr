@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -28,6 +27,18 @@ namespace api.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            return GetForecasts();
+        }
+
+        [HttpGet("slow")]
+        public IEnumerable<WeatherForecast> GetSlow()
+        {
+            for (var f = 0; f < 50000000; f++) ;
+            return GetForecasts();
+        }
+
+        private IEnumerable<WeatherForecast> GetForecasts()
+        {
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
@@ -36,27 +47,6 @@ namespace api.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
-        }
-
-        [HttpGet("/slow")]
-        public IEnumerable<WeatherForecast> GetSlow()
-        {
-            lock (lockObject)
-            {
-                var f = 0;
-                while(f < 50000000)
-                {
-                    ++f;
-                }
-                var rng = new Random();
-                return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-                {
-                    Date = DateTime.Now.AddDays(index),
-                    TemperatureC = rng.Next(-20, 55),
-                    Summary = Summaries[rng.Next(Summaries.Length)]
-                })
-                .ToArray();
-            }
         }
     }
 }
